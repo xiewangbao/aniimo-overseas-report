@@ -171,12 +171,81 @@
     .ncard{min-height:0;}
     .foot .wrap{flex-direction:column;gap:8px;}
   }
+
+  /* ===== 移动端悬浮板块导航（跳转 + 预览各 part 结合） ===== */
+  html{scroll-padding-top:12px;}
+  .navfab,.navsheet,.navmask{display:none;}
+  @media(max-width:820px){
+    /* 悬浮按钮 */
+    .navfab{
+      display:flex;align-items:center;justify-content:center;gap:7px;
+      position:fixed;right:16px;bottom:18px;z-index:60;
+      height:48px;padding:0 18px 0 15px;border:none;border-radius:26px;
+      background:var(--primary);color:var(--on-primary);
+      font-family:inherit;font-size:14px;font-weight:600;letter-spacing:.3px;
+      box-shadow:0 6px 20px rgba(204,120,92,.38),0 2px 6px rgba(20,20,19,.12);
+      cursor:pointer;transition:transform .18s ease,background .18s ease;
+    }
+    .navfab:active{transform:scale(.94);background:var(--primary-active);}
+    .navfab svg{width:18px;height:18px;flex:0 0 auto;}
+    .navfab .cur{max-width:112px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500;opacity:.92;}
+
+    /* 遮罩 */
+    .navmask{
+      display:block;position:fixed;inset:0;z-index:70;
+      background:rgba(20,20,19,.44);backdrop-filter:blur(2px);
+      opacity:0;pointer-events:none;transition:opacity .26s ease;
+    }
+    .navmask.open{opacity:1;pointer-events:auto;}
+
+    /* 底部抽屉 */
+    .navsheet{
+      display:block;position:fixed;left:0;right:0;bottom:0;z-index:80;
+      background:var(--canvas);border-top-left-radius:20px;border-top-right-radius:20px;
+      box-shadow:0 -10px 40px rgba(20,20,19,.24);
+      max-height:82vh;overflow-y:auto;-webkit-overflow-scrolling:touch;
+      transform:translateY(102%);transition:transform .30s cubic-bezier(.22,.61,.36,1);
+      padding-bottom:calc(14px + env(safe-area-inset-bottom));
+    }
+    .navsheet.open{transform:translateY(0);}
+    .navsheet-head{
+      position:sticky;top:0;background:var(--canvas);
+      display:flex;align-items:center;justify-content:space-between;
+      padding:16px 20px 12px;border-bottom:1px solid var(--hairline);
+    }
+    .navsheet-head .ttl{font-family:"Cormorant Garamond","Noto Serif SC",serif;font-size:22px;font-weight:500;color:var(--ink);}
+    .navsheet-head .sub{font-size:11px;color:var(--muted);margin-top:2px;letter-spacing:.4px;}
+    .navsheet-close{
+      border:none;background:var(--surface-soft);color:var(--muted);
+      width:32px;height:32px;border-radius:50%;font-size:18px;line-height:1;
+      cursor:pointer;flex:0 0 auto;
+    }
+    .navsheet-close:active{background:var(--surface-cream-strong);}
+
+    .navlist{padding:8px 12px 4px;}
+    .navlink{
+      display:block;text-decoration:none;color:inherit;
+      padding:13px 14px;border-radius:12px;margin-bottom:4px;
+      border:1px solid transparent;transition:background .15s ease;
+    }
+    .navlink:active{background:var(--surface-soft);}
+    .navlink .row{display:flex;align-items:baseline;gap:10px;}
+    .navlink .no{
+      font-family:"Cormorant Garamond",serif;font-size:15px;font-weight:600;
+      color:var(--primary);flex:0 0 auto;min-width:26px;letter-spacing:.5px;
+    }
+    .navlink .nm{font-size:15px;font-weight:600;color:var(--ink);line-height:1.35;}
+    .navlink .pv{font-size:12.5px;color:var(--muted);line-height:1.5;margin:4px 0 0 36px;}
+    /* 当前所在板块高亮 */
+    .navlink.active{background:rgba(204,120,92,.09);border-color:rgba(204,120,92,.28);}
+    .navlink.active .nm{color:var(--primary-active);}
+  }
 </style>
 </head>
 <body>
 
 <!-- HERO -->
-<div class="hero">
+<div class="hero" id="top">
   <span class="kv-credit">主视觉 © Pawprint Studio / Aniimo 官方 · 仅内部参考</span>
   <div class="wrap">
     <div class="eyebrow">Competitor Intelligence · Overseas Only</div>
@@ -192,7 +261,7 @@
 </div>
 
 <!-- 01 发行节奏与定调 -->
-<section>
+<section id="sec01">
   <div class="wrap">
     <div class="sec-num">01 / Release Cadence</div>
     <h2 class="sec-h serif">发行与上线节奏、定调</h2>
@@ -266,7 +335,7 @@
 </section>
 
 <!-- 02 产品定位/卖点/商业化 -->
-<section class="cream">
+<section id="sec02" class="cream">
   <div class="wrap">
     <div class="sec-num">02 / Positioning & Selling Points</div>
     <h2 class="sec-h serif">产品定位、卖点与商业化</h2>
@@ -311,7 +380,7 @@
 </section>
 
 <!-- 03 社媒热度 -->
-<section>
+<section id="sec03">
   <div class="wrap">
     <div class="sec-num">03 / Social Reach</div>
     <h2 class="sec-h serif">市场动作 ① 社媒热度</h2>
@@ -410,7 +479,7 @@
 </section>
 
 <!-- 04 测试及预约 -->
-<section class="cream">
+<section id="sec04" class="cream">
   <div class="wrap">
     <div class="sec-num">04 / Testing & Pre-registration</div>
     <h2 class="sec-h serif">市场动作 ② 测试与预约</h2>
@@ -470,7 +539,7 @@
 </section>
 
 <!-- 05 创作者生态 -->
-<section>
+<section id="sec05">
   <div class="wrap">
     <div class="sec-num">05 / Creator Ecosystem</div>
     <h2 class="sec-h serif">市场动作 ③ 创作者内容生态</h2>
@@ -551,7 +620,7 @@
 </section>
 
 <!-- 06 负面舆情专题 gallery -->
-<section class="cream">
+<section id="sec06" class="cream">
   <div class="wrap">
     <div class="sec-num">06 / Negative Sentiment Deep-dive</div>
     <h2 class="sec-h serif">负面舆情专题拆解</h2>
@@ -746,7 +815,7 @@
 </section>
 
 <!-- 结论 -->
-<section class="cream" style="border-bottom:none">
+<section id="sec07" class="cream" style="border-bottom:none">
   <div class="wrap">
     <div class="sec-num">07 / Takeaways</div>
     <h2 class="sec-h serif">核心结论</h2>
@@ -764,5 +833,58 @@
   <div style="max-width:1080px;margin:0 auto;padding:0 32px 28px;font-size:12px;color:var(--muted);letter-spacing:.3px;border-top:1px solid var(--hairline);margin-top:40px;padding-top:14px;">
     竞品情报报告 · 制作 Eric · 数据窗口 2026-06-07 ~ 07-14 · 更新于 2026-07-14
   </div>
+
+<!-- ===== 移动端悬浮板块导航 ===== -->
+<button class="navfab" id="navFab" aria-label="打开板块导航">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+  <span class="cur" id="navCur">目录</span>
+</button>
+<div class="navmask" id="navMask"></div>
+<nav class="navsheet" id="navSheet" aria-label="板块导航">
+  <div class="navsheet-head">
+    <div>
+      <div class="ttl">跳转到板块</div>
+      <div class="sub">ANIIMO 全球封测分析 · 7 大板块</div>
+    </div>
+    <button class="navsheet-close" id="navClose" aria-label="关闭">&times;</button>
+  </div>
+  <div class="navlist">
+    <a class="navlink" href="#top" data-t="概览"><div class="row"><span class="no">00</span><span class="nm">报告概览</span></div><div class="pv">海外总曝光 211.7M · 观看 45.1M · 全球预约破千万 · 数据窗口 6/7–7/14</div></a>
+    <a class="navlink" href="#sec01" data-t="发行节奏"><div class="row"><span class="no">01</span><span class="nm">发行与上线节奏、定调</span></div><div class="pv">长线预热 + 多轮测试蓄水的主机级发行，海外定档信息透明。</div></a>
+    <a class="navlink" href="#sec02" data-t="产品定位"><div class="row"><span class="no">02</span><span class="nm">产品定位、卖点与商业化</span></div><div class="pv">开放世界为第一卖点，公平付费是关键预期；上线日期/画面为痛点。</div></a>
+    <a class="navlink" href="#sec03" data-t="社媒热度"><div class="row"><span class="no">03</span><span class="nm">市场动作 ① 社媒热度</span></div><div class="pv">全网声量分布 + 开测前后分期对比 + EN/非EN 语种拆分。</div></a>
+    <a class="navlink" href="#sec04" data-t="测试预约"><div class="row"><span class="no">04</span><span class="nm">市场动作 ② 测试与预约</span></div><div class="pv">招募人数、平台、覆盖国家、用户体验反馈与预约效果。</div></a>
+    <a class="navlink" href="#sec05" data-t="创作者生态"><div class="row"><span class="no">05</span><span class="nm">市场动作 ③ 创作者内容生态</span></div><div class="pv">内容/直播数据、Twitch 井喷 54×、品类占比与创作者体系。</div></a>
+    <a class="navlink" href="#sec06" data-t="负面舆情"><div class="row"><span class="no">06</span><span class="nm">负面舆情专题拆解</span></div><div class="pv">715 条负面按话题聚合，开测前「等不到」→ 开测后「付费+体验」。</div></a>
+    <a class="navlink" href="#sec07" data-t="核心结论"><div class="row"><span class="no">07</span><span class="nm">核心结论</span></div><div class="pv">6 条战略要点：直播主战场、非英洼地、负面转向、反超宝可梦。</div></a>
+  </div>
+</nav>
+<script>
+(function(){
+  var fab=document.getElementById('navFab'),sheet=document.getElementById('navSheet'),
+      mask=document.getElementById('navMask'),close=document.getElementById('navClose'),
+      cur=document.getElementById('navCur'),links=[].slice.call(document.querySelectorAll('.navlink'));
+  function open(){sheet.classList.add('open');mask.classList.add('open');}
+  function shut(){sheet.classList.remove('open');mask.classList.remove('open');}
+  fab.addEventListener('click',function(){sheet.classList.contains('open')?shut():open();});
+  close.addEventListener('click',shut);
+  mask.addEventListener('click',shut);
+  links.forEach(function(a){
+    a.addEventListener('click',function(){setTimeout(shut,120);});
+  });
+  // 滚动高亮当前所在板块 + 同步 FAB 文案
+  var ids=['top','sec01','sec02','sec03','sec04','sec05','sec06','sec07'];
+  var secs=ids.map(function(id){return document.getElementById(id);});
+  function onScroll(){
+    var y=window.scrollY+window.innerHeight*0.32,idx=0;
+    for(var i=0;i<secs.length;i++){if(secs[i]&&secs[i].offsetTop<=y)idx=i;}
+    links.forEach(function(a,i){a.classList.toggle('active',i===idx);});
+    var t=links[idx]&&links[idx].getAttribute('data-t');
+    if(t)cur.textContent=t;
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll);onScroll();
+})();
+</script>
 </body>
 </html>
